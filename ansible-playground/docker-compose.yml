@@ -1,0 +1,32 @@
+version: '3.6'
+services:
+  semaphore:
+    ports:
+      - 3000:3000
+    restart: always
+    image: semaphoreui/semaphore:latest
+    environment:
+      SEMAPHORE_DB_DIALECT: bolt
+      SEMAPHORE_ADMIN_PASSWORD: semaphore123
+      SEMAPHORE_ADMIN_NAME: admin
+      SEMAPHORE_ADMIN_EMAIL: admin@localhost
+      SEMAPHORE_ADMIN: admin
+
+  gitlab:
+    image: 'gitlab/gitlab-ee:latest'
+    restart: always
+    hostname: 'gitlab.example.com'
+    environment:
+      GITLAB_ROOT_PASSWORD: gitlab123
+      #GITLAB_OMNIBUS_CONFIG: |
+        #external_url 'https://gitlab.example.com'
+        # Add any other gitlab.rb configuration here, each on its own line
+    ports:
+      - '3080:80'
+      - '3443:443'
+      - '3022:22'
+    volumes:
+      - '/var/lib/docker/volumes/gitlab/_data/config:/etc/gitlab'
+      - '/var/lib/docker/volumes/gitlab/_data/logs:/var/log/gitlab'
+      - '/var/lib/docker/volumes/gitlab/_data/data:/var/opt/gitlab'
+    shm_size: '256m'
