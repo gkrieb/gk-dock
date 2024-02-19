@@ -8,9 +8,9 @@ services:
     environment:
       EULA: "TRUE"
       #TYPE: PAPER
-    #depends_on:
-    #  restore-backup:
-    #    condition: service_completed_successfully
+    depends_on:
+      restore-backup:
+        condition: service_completed_successfully
     volumes:
       - ${SOURCE_DIR}/mc-data:/data
   # "init" container for mc to restore the data volume when empty    
@@ -26,9 +26,9 @@ services:
       - ${SOURCE_DIR}/mc-backups:/backups:ro
   backups:
     image: itzg/mc-backup
-    #depends_on:
-    #  mc:
-    #    condition: service_healthy
+    depends_on:
+      mc:
+        condition: service_healthy
     environment:
       BACKUP_INTERVAL: "2h"
       RCON_HOST: mc
